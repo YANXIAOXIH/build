@@ -1,0 +1,43 @@
+name: Build som3588
+on:
+  workflow_dispatch:
+    inputs:
+      armbian_release:
+        description: "RELEASE"
+        required: true
+        default: "bookworm"
+        type: choice
+        options:
+          - bookworm
+          - trixie
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 安装依赖
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install git xz-utils 
+          
+      - name: 下载源码
+        run: |
+          git clone --depth=1 --branch=main https://github.com/YANXIAOXIH/build
+          
+      - name: 编译armbian
+        run: |
+          pushd build
+          ./compile.sh build BOARD=som3588-cat BRANCH=vendor BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no RELEASE=${{ inputs.armbian_release }}
+      - name: 打包
+        run: |
+          cd rootfs
+          sudo xz *.img
+
+      - name: 上传 Armbian
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.version.outputs.NAME }}
+          body_path: release_notes.md
+          tag_name: ${{ steps.version.outputs.TAG_NAME }}
+          files: |
+            kernel/*.img
+            rootfs/rootfs.img.xz
