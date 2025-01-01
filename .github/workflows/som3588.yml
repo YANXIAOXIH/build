@@ -29,7 +29,7 @@ jobs:
           ./compile.sh build BOARD=som3588-cat BRANCH=vendor BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no RELEASE=${{ inputs.armbian_release }}
       - name: 打包
         run: |
-          cd rootfs
+          cd output/images
           sudo xz *.img
 
       - name: 上传 Armbian
@@ -39,5 +39,4 @@ jobs:
           body_path: release_notes.md
           tag_name: ${{ steps.version.outputs.TAG_NAME }}
           files: |
-            kernel/*.img
-            rootfs/rootfs.img.xz
+            output/images/*.img.xz
