@@ -12,7 +12,7 @@ on:
           - trixie
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: 安装依赖
         run: |
@@ -29,8 +29,9 @@ jobs:
           ./compile.sh build BOARD=som3588-cat BRANCH=vendor BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no RELEASE=${{ inputs.armbian_release }}
       - name: 打包
         run: |
-          cd output/images
-          sudo xz *.img
+          sudo xz output.xz output
+          sudo xz cache.xz cache 
+          
 
       - name: 上传 Armbian
         uses: softprops/action-gh-release@v2
@@ -39,4 +40,5 @@ jobs:
           body_path: release_notes.md
           tag_name: ${{ steps.version.outputs.TAG_NAME }}
           files: |
-            output/images/*.img.xz
+           */*.xz
+            *.xz
