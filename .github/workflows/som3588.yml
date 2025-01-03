@@ -10,35 +10,13 @@ on:
         options:
           - bookworm
           - trixie
-jobs:
-  build:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: 安装依赖
-        run: |
-          sudo apt-get -y update
-          sudo apt-get -y install git xz-utils 
-          
-      - name: 下载源码
-        run: |
-          git clone --depth=1 --branch=main https://github.com/YANXIAOXIH/build
-          
-      - name: 编译armbian
-        run: |
-          pushd build
-          ./compile.sh build BOARD=som3588-cat BRANCH=vendor BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no RELEASE=${{ inputs.armbian_release }}
-      - name: 打包
-        run: |
-          sudo xz output.xz output
-          sudo xz cache.xz cache 
-          
 
-      - name: 上传 Armbian
-        uses: softprops/action-gh-release@v2
+jobs:
+  build-armbian:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: YANXIAOXIH/build@main
         with:
-          name: ${{ steps.version.outputs.NAME }}
-          body_path: release_notes.md
-          tag_name: ${{ steps.version.outputs.TAG_NAME }}
-          files: |
-           */*.xz
-            *.xz
+          armbian_release:   "${{ inputs.armbian_release }}"                        # userspace
+          armbian_target:    "build"                        # build=image, kernel=kernel
+          armbian_board:     "som3588-cat"                   # build target
