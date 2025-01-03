@@ -319,7 +319,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
 
-      - uses: armbian/build@main
+      - uses: YANXIAOXIH/build@main
         with:
           armbian_token:              "${{secrets.GITHUB_TOKEN}}"
           armbian_target:             "${{inputs.armbian_target}}"
