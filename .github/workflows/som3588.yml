@@ -1,4 +1,4 @@
-name: "Build One by One (anyone)"
+name: "som3588"
 on:
   workflow_dispatch:
     inputs:
