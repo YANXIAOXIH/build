@@ -9,7 +9,7 @@ on:
         default: 'som3588-cat'
         type: choice
         options:
-          - cyber-aib-rk3588
+          - som3588-cat
       BRANCH:  
         description: 'Armbian branch'  
         default: 'vendor'  
