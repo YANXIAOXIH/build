@@ -316,7 +316,7 @@ jobs:
 
   build:
     name: "Build Armbian"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
 
       - uses: armbian/build@main
